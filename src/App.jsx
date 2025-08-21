@@ -1,8 +1,9 @@
-function App() {
-  const [count, setCount] = useState(0);
+import UserProfile from "./components/userProfile/userProfile.jsx";
 
+function App() {
   return (
     <>
+      <UserProfile />
       <h1>Hello world</h1>
     </>
   );
