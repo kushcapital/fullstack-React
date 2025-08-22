@@ -1,12 +1,14 @@
-.userDetails{
-    align-items: left;
-    color: green;
-    background-color: rgb(42, 8, 8);
-    padding: 40px;
+@import "tailwindcss";
+
+.userDetails {
+  align-items: left;
+  color: green;
+  background-color: rgb(42, 8, 8);
+  padding: 40px;
 }
 
-.border{
-    border-radius: 8px;
-    border-color: rgb(73, 226, 43);
-    border: 10px;
+.border {
+  border-radius: 8px;
+  border-color: rgb(73, 226, 43);
+  border: 10px;
 }
