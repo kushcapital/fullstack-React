@@ -1,13 +1,13 @@
 import styles from "./userProfile.module.css";
 
-export default function userProfile() {
+export default function userProfile({firstName, lastName, skills}= props) {
   return (
     <>
       <section>
         <ul className={`${styles.userDetails} ${styles.border}`}>
-          <li>FirstName: John</li>
-          <li>Last Name: Doe</li>
-          <li>Skills: React, javascript</li>
+          <li>FirstName: {firstName}</li>
+          <li>Last Name: {lastName}</li>
+          <li>Skills: {skills}</li>
         </ul>
       </section>
     </>
