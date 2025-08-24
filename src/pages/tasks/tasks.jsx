@@ -5,11 +5,13 @@ export default function Tasks() {
     <section className="flex flex-ro w-full p-4 gap-8 ">
       <section className="flex basis-2/3 justify-center">
         <div className="flex flex-col w-4/5 p-4">
-          <h1 className="text-white font-bold text-2xl mb-8">Tasks as on: Wednesday, 1 jan 2025</h1>
+          <h1 className="text-white font-bold text-2xl mb-8">
+            Tasks as on: Wednesday, 1 jan 2025
+          </h1>
           <div className="flex justify-around">
-            <TaskCounter/>
-            <TaskCounter/>
-            <TaskCounter/>
+            <TaskCounter count={4} type="todo" />
+            <TaskCounter count={10} type="inProgress" />
+            <TaskCounter count={12} type="completed" />
           </div>
         </div>
       </section>
