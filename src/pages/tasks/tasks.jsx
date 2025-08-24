@@ -1,20 +1,22 @@
 import { TaskCounter } from "@/components/tasksCounter/tasksCounter.jsx";
-import {FilterBar} from "../../components/filterBar/filterBar.jsx"
+import { FilterBar } from "../../components/filterBar/filterBar.jsx";
 
 export default function Tasks() {
   return (
     <section className="flex flex-ro w-full p-4 gap-8 ">
       <section className="flex basis-2/3 justify-center">
-        <div className="flex flex-col w-4/5 p-4">
-          <h1 className="text-white font-bold text-2xl mb-8">
+        <div className="flex flex-col w-10/12 p-4 items-center">
+          <h1 className="text-white font-bold text-2xl mb-8 w-full">
             Tasks as on: Wednesday, 1 jan 2025
           </h1>
-          <div className="flex justify-around mb-16">
-            <TaskCounter count={4} type="todo" />
-            <TaskCounter count={10} type="inProgress" />
-            <TaskCounter count={12} type="completed" />
+          <div className="w-11/12 flex flex-col">
+            <div className="flex justify-between mb-16">
+              <TaskCounter count={4} type="todo" />
+              <TaskCounter count={10} type="inProgress" />
+              <TaskCounter count={12} type="completed" />
+            </div>
+            <FilterBar />
           </div>
-          <FilterBar />
         </div>
       </section>
       <section className="flex basis-1/3 bg-red-300">
