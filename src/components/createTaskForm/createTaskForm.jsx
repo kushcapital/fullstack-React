@@ -1,7 +1,3 @@
-import { Input } from "../ui/input.jsx";
-import { Textarea } from "../ui/textarea.jsx";
-import { Card, CardHeader, CardContent } from "../ui/card.jsx";
-import { Label } from "../ui/label.jsx";
 import {
   Select,
   SelectContent,
@@ -10,6 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "../ui/input.jsx";
+import { Textarea } from "../ui/textarea.jsx";
+import { Card, CardHeader, CardContent } from "../ui/card.jsx";
+import { Label } from "../ui/label.jsx";
 import { DatePickerForm } from "./datePicker.jsx";
 
 export function CreateTaskForm() {
@@ -59,9 +59,6 @@ export function CreateTaskForm() {
                     </SelectItem>
                     <SelectItem value="inProgress" className="text-base py-3">
                       ⚡ In Progress
-                    </SelectItem>
-                    <SelectItem value="completed" className="text-base py-3">
-                      ✅ Completed
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
