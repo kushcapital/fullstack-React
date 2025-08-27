@@ -1,11 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Link, createBrowserRouter, RouterProvider } from "react-router";
+import { RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.jsx";
-import {routter} from "./routes.jsx"
-
-
+import { router } from "./routes.jsx";
 
 // Get the root DOM element.
 const rootElement = document.getElementById("root");
@@ -16,6 +13,6 @@ const root = createRoot(rootElement);
 root.render(
   <StrictMode>
     {/* Provide the router configuration to the application */}
-    <RouterProvider router={routter} />
+    <RouterProvider router={router} />
   </StrictMode>
 );

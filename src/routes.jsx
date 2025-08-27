@@ -3,9 +3,9 @@ import SignUp from "./pages/signup/signup.jsx";
 import Tasks from "./pages/tasks/tasks.jsx";
 import Error404 from "./pages/404/404.jsx";
 
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 
-export const routter = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
