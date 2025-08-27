@@ -1,6 +1,7 @@
 import { TaskCounter } from "@/components/tasksCounter/tasksCounter.jsx";
 import { FilterBar } from "../../components/filterBar/filterBar.jsx";
 import { Task } from "../../components/task/task.jsx";
+import { TaskSidebar } from "@/components/taskSidebar/taskSidebar.jsx";
 
 export default function Tasks() {
   return (
@@ -21,8 +22,8 @@ export default function Tasks() {
           </div>
         </div>
       </section>
-      <section className="flex basis-1/3 bg-red-300">
-        create the task page
+      <section className="flex basis-1/3 ">
+        <TaskSidebar />
       </section>
     </section>
   );
