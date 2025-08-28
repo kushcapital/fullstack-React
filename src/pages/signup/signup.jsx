@@ -125,7 +125,7 @@ export default function SignUp() {
                     login Here
                   </Link>
                 </p>
-                <Button>Signup</Button>
+                <Button type="submit">Signup</Button>
               </CardFooter>
             </form>
           </Form>
