@@ -41,7 +41,6 @@ export default function SignUp() {
             <CardDescription>
               Create a new account to start creating tasks
             </CardDescription>
-            <CardAction>Card Action</CardAction>
           </CardHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>

@@ -19,7 +19,6 @@ export default function Login() {
           <CardHeader>
             <CardTitle>Login</CardTitle>
             <CardDescription>Login and Create Tasks</CardDescription>
-            <CardAction>Card Action</CardAction>
           </CardHeader>
           <CardContent>
             <Input className="mb-4" type="email" placeholder="Email" />
