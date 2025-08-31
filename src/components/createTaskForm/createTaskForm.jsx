@@ -1,113 +1,197 @@
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "../ui/input.jsx";
-import { Textarea } from "../ui/textarea.jsx";
-import { Card, CardHeader, CardContent } from "../ui/card.jsx";
-import { Label } from "../ui/label.jsx";
-import { DatePickerForm } from "./datePicker.jsx";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { CreateTaskSchema } from "@/schema/createTask.schema.js";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+/* Datepicker imports */
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function CreateTaskForm() {
+  const [date, setDate] = useState();
+
+  // 1. Define your form.
+  const form = useForm({
+    resolver: zodResolver(CreateTaskSchema),
+  });
+
+  /** Function to handle what will happen when the form is submitted */
+  function onSubmit(values) {
+    console.log(values);
+
+    let dueDate = JSON.stringify(values.dueDate);
+    console.log(dueDate);
+  }
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <h2 className="text-2xl font-bold tracking-tight">Create New Task</h2>
-      </CardHeader>
-      <CardContent>
-        <form className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-medium">
-              Task Title *
-            </Label>
-            <Input
-              id="title"
-              type="text"
-              placeholder="Enter task title..."
-              className="h-11"
-              required
+    <div>
+      <h2 className="text-xl mb-4">Create a new task</h2>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="py-2">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Task Title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-row justify-between py-2">
+            <div className="w-full mr-2">
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="todo">Todo</SelectItem>
+                          <SelectItem value="inProgress">
+                            In Progress
+                          </SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="w-full ml-2">
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="low">Low</SelectItem>
+                          <SelectItem value="normal">Normal</SelectItem>
+                          <SelectItem value="high">High</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="py-2">
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !date && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a due date</span>
+                          )}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium">
-              Description
-            </Label>
-            <Textarea
-              id="description"
-              placeholder="Describe your task in detail..."
-              rows={4}
-              className="resize-none"
+          <div className="py-2">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea placeholder="Task Description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Status</Label>
-              <Select>
-                <SelectTrigger className="h-14 px-4 text-base">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="todo" className="text-base py-3">
-                      📋 To Do
-                    </SelectItem>
-                    <SelectItem value="inProgress" className="text-base py-3">
-                      ⚡ In Progress
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Priority</Label>
-              <Select>
-                <SelectTrigger className="h-14 px-4 text-base">
-                  <SelectValue placeholder="Select priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="low" className="text-base py-3">
-                      🟢 Low
-                    </SelectItem>
-                    <SelectItem value="normal" className="text-base py-3">
-                      🟡 Normal
-                    </SelectItem>
-                    <SelectItem value="high" className="text-base py-3">
-                      🔴 High
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <DatePickerForm />
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 focus:outline-none transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors"
-            >
-              Create Task
-            </button>
+          <div className="py-2 flex justify-end">
+            <Button type = "submit">Create Task</Button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </Form>
+    </div>
   );
 }
