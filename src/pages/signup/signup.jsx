@@ -19,14 +19,18 @@ import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { SignupSchema } from "../../schema/signup.schema.js";
+import { useSignup } from "@/hooks/useSignup.hook.js";
 
 export default function SignUp() {
+  const { mutate, isError, isSuccess, isLoading } = useSignup();
+
   const form = useForm({
     resolver: zodResolver(SignupSchema),
   });
 
   function onSubmit(values) {
-    console.log(values);
+    mutate(values);
+    form.reset();
   }
 
   return (
