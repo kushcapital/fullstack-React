@@ -20,10 +20,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button.jsx";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin.hook.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Login() {
   const { mutate, isError, isSuccess } = useLogin();
+  const [login, setLogin] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(LoginSchema),
@@ -35,8 +40,24 @@ export default function Login() {
   }
 
   useEffect(() => {
-    console.log(isSuccess);
+    if (isSuccess) {
+      setLogin(true);
+    }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (login) {
+      navigate("/tasks");
+    }
+  }, [login, navigate]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("Uh Ho! Your request failed", {
+        description: "please Check your login details",
+      });
+    }
+  }, [isError]);
 
   return (
     <section className="flex flex-row w-full max-w-screen-xl min-h-screen justify-center items-center">
@@ -97,6 +118,7 @@ export default function Login() {
           </Form>
         </Card>
       </div>
+      <Toaster />
     </section>
   );
 }
