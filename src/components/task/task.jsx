@@ -19,6 +19,7 @@ export function Task(props) {
     status = "todo",
     priority = "low",
     dueDate = new Date("2025-01-01T12:00:00.0002"),
+    id,
   } = props;
 
   let formattedDate =
