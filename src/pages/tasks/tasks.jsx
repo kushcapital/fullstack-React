@@ -2,8 +2,22 @@ import { TaskCounter } from "@/components/tasksCounter/tasksCounter.jsx";
 import { FilterBar } from "../../components/filterBar/filterBar.jsx";
 import { Task } from "../../components/task/task.jsx";
 import { TaskSidebar } from "@/components/taskSidebar/taskSidebar.jsx";
+import { useFetchTasks } from "@/hooks/useFetchTasks.hook.js";
+import { useState } from "react";
 
 export default function Tasks() {
+  const [order, setOrder] = useState("asc");
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const { data, isError, isSuccess, isPending, error } = useFetchTasks({
+    order,
+    limit,
+    page,
+  });
+
+  console.log(data);
+
   return (
     <section className="flex flex-ro w-full p-4 gap-8 ">
       <section className="flex basis-2/3 justify-center">

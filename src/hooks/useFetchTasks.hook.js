@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const fetchTasks = async ({ queryKey }) => {
   const [_key, { order = "asc", limit = 10, page = 1 }] = queryKey;
-  const token = Cookies.get({ token });
+  const token = Cookies.get("token");
 
   const url = new URL(`${import.meta.env.VITE_API_URL}tasks`);
   url.searchParams.append("order", order);
@@ -23,12 +23,12 @@ const fetchTasks = async ({ queryKey }) => {
   return await response.json();
 };
 
-export function useFetchTasks(param = {}) {
+export function useFetchTasks(params = {}) {
   return useQuery({
     queryKey: ["fetchTasks", params],
-    queryFn: "",
-    onSucess: (response) => {
-      console.log("Tasks fetched sucessfully", response);
+    queryFn: fetchTasks,
+    onSuccess: (response) => {
+      console.log("Tasks fetched successfully", response);
     },
     onError: (error) => {
       console.log("Error fetching tasks", error);
