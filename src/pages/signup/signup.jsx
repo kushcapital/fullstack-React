@@ -33,7 +33,7 @@ function LoginRedirect() {
 }
 
 export default function SignUp() {
-  const { mutate, isError, isSuccess, isLoading } = useSignup();
+  const { mutate, isError, isSuccess, isPending } = useSignup();
 
   const form = useForm({
     resolver: zodResolver(SignupSchema),

@@ -30,11 +30,15 @@ import { cn } from "@/lib/utils";
 /* Datepicker imports */
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateTask } from "@/hooks/useCreateTask.hook.js";
+import { Toaster } from "sonner";
+import { toast } from "sonner";
 
 export function CreateTaskForm() {
   const [date, setDate] = useState();
+  const { mutate, isError, isSuccess, isPending } = useCreateTask();
 
   // 1. Define your form.
   const form = useForm({
@@ -43,11 +47,25 @@ export function CreateTaskForm() {
 
   /** Function to handle what will happen when the form is submitted */
   function onSubmit(values) {
-    console.log(values);
-
-    let dueDate = JSON.stringify(values.dueDate);
-    console.log(dueDate);
+    let dueDate = values.dueDate.toISOString();
+    mutate({ ...values, dueDate });
+    form.reset();
   }
+
+  useEffect(()=>{
+    if(isSuccess){
+      toast.success("New Task Created")
+    }
+  },[isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("Uh Ho! Your request failed", {
+        description: "please try agian",
+      });
+    }
+  }, [isError]);
+
   return (
     <div>
       <h2 className="text-xl mb-4">Create a new task</h2>
@@ -188,10 +206,11 @@ export function CreateTaskForm() {
           </div>
 
           <div className="py-2 flex justify-end">
-            <Button type = "submit">Create Task</Button>
+            <Button type="submit">Create Task</Button>
           </div>
         </form>
       </Form>
+      <Toaster />
     </div>
   );
 }
