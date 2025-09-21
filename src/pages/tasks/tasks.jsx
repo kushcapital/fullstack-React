@@ -3,8 +3,9 @@ import { FilterBar } from "../../components/filterBar/filterBar.jsx";
 import { Task } from "../../components/task/task.jsx";
 import { TaskSidebar } from "@/components/taskSidebar/taskSidebar.jsx";
 import { useFetchTasks } from "@/hooks/useFetchTasks.hook.js";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TaskContext } from "@/context/tasks.context.jsx";
 
 function DisplaySkeleton() {
   return (
@@ -22,12 +23,19 @@ export default function Tasks() {
   const [order, setOrder] = useState("asc");
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const { tasks, setTasks } = useContext(TaskContext);
 
   const { data, isError, isSuccess, isPending, error } = useFetchTasks({
     order,
     limit,
     page,
   });
+
+  useEffect(() => {
+    if (data) {
+      setTasks(data);
+    }
+  }, [data]);
 
   console.log(data);
 
