@@ -11,8 +11,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUpdateTask } from "@/hooks/useUpdateTask.hook.js";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function Task(props) {
+  const { mutate, isSuccess } = useUpdateTask();
+  const [progress, setProgress] = useState(false);
+  const queryClient = useQueryClient();
+
   const {
     title = "This is the dafault title",
     description = "This is the dafault description",
@@ -28,6 +35,24 @@ export function Task(props) {
       month: "short",
       year: "numeric",
     }) || "No date";
+
+  useEffect(() => {
+    if (status === "inProgress") {
+      setProgress(true);
+    }
+  }, [status]);
+
+  function handleProgressChange(value) {
+    setProgress(value);
+    mutate({
+      _id: id,
+      status: value ? "inProgress" : "todo",
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["fetchTasks"],
+      refetchType: "all",
+    });
+  }
 
   return (
     <Card className="w-full mb-6 shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-l-blue-500">
@@ -65,10 +90,8 @@ export function Task(props) {
       <CardFooter className="flex justify-between items-center pt-4 border-t border-slate-100">
         <div className="flex items-center gap-3">
           <Switch
-            checked={status === "inProgress" ? true : false}
-            onCheckedChange={() => {
-              console.log("Swtiched changes");
-            }}
+            // checked={progress}
+            onCheckedChange={handleProgressChange}
             id="in-progress"
             className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-slate-300 border-2 border-slate-200"
           />
