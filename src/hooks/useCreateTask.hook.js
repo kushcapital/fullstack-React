@@ -19,7 +19,7 @@ const createTask = async (task) => {
 
 export function useCreateTask() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: createTask,
     onSuccess: (response) => {
