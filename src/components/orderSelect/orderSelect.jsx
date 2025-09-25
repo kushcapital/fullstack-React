@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function OrderSelect() {
+export function OrderSelect({ order, setOrder }) {
   return (
-    <Select>
+    <Select value={order} onValueChange={setOrder}>
       <SelectTrigger className="w-[140px]">
         <SelectValue placeholder="Select Order" />
       </SelectTrigger>

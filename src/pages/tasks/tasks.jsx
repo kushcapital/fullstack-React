@@ -6,6 +6,7 @@ import { useFetchTasks } from "@/hooks/useFetchTasks.hook.js";
 import { useState, useContext, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TaskContext } from "@/context/tasks.context.jsx";
+import { useSearchParams } from "react-router-dom";
 
 function DisplaySkeleton() {
   return (
@@ -20,10 +21,20 @@ function DisplaySkeleton() {
 }
 
 export default function Tasks() {
-  const [order, setOrder] = useState("asc");
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [order, setOrder] = useState(searchParams.get("order") || "asc");
+  const [limit, setLimit] = useState(parseInt(searchParams.get("limit")) || 10);
+  const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
   const { tasks, setTasks } = useContext(TaskContext);
+
+  // Update search params when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set("order", order);
+    params.set("limit", limit.toString());
+    params.set("page", page.toString());
+    setSearchParams(params);
+  }, [order, limit, page, setSearchParams]);
 
   const { data, isError, isSuccess, isPending, error } = useFetchTasks({
     order,
@@ -36,8 +47,6 @@ export default function Tasks() {
       setTasks(data);
     }
   }, [data]);
-
-  console.log(data);
 
   return (
     <section className="flex flex-ro w-full p-4 gap-8 ">
@@ -52,7 +61,7 @@ export default function Tasks() {
               <TaskCounter count={10} type="inProgress" />
               <TaskCounter count={12} type="completed" />
             </div>
-            <FilterBar />
+            <FilterBar order={order} setOrder={setOrder} />
 
             {!data &&
               [...Array(limit)].map((_entry, index) => {
