@@ -9,12 +9,7 @@ import {
 } from "@/components/ui/pagination";
 import { useContext, useState, useEffect } from "react";
 import { TaskContext } from "@/context/tasks.context.jsx";
-
-function extractQueryString(url) {
-  const parsedURL = new URL(url);
-  const params = new URLSearchParams(parsedURL.search);
-  return params;
-}
+import { extractQueryString } from "@/lib/extractQueryString.js";
 
 export function TaskPagination() {
   const [links, setLinks] = useState();
@@ -28,10 +23,14 @@ export function TaskPagination() {
   const nextPage =
     links && links.next ? extractQueryString(links.next).toString() : "#";
   const order =
-    links && links.next ? extractQueryString(links.next).get("order") : "asc";
+    links && links.next
+      ? extractQueryString(links.next).get("order")
+      : links && links.previous
+      ? extractQueryString(links.previous).get("order")
+      : "asc";
 
   useEffect(() => {
-    if (tasks) {
+    if (tasks?.pagination) {
       setLinks(tasks.pagination.links);
       setMeta(tasks.pagination.meta);
     }
@@ -50,7 +49,7 @@ export function TaskPagination() {
                 href={`/tasks?limit=${meta.itemsPerPage}&page=${
                   index + 1
                 }&order=${order}`}
-                isActive={index + 1 == meta.currentPage ? true : false}
+                isActive={index + 1 === meta.currentPage}
               >
                 {index + 1}
               </PaginationLink>
