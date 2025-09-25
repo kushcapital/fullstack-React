@@ -52,11 +52,11 @@ export function CreateTaskForm() {
     form.reset();
   }
 
-  useEffect(()=>{
-    if(isSuccess){
-      toast.success("New Task Created")
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("New Task Created");
     }
-  },[isSuccess])
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
