@@ -20,6 +20,20 @@ function DisplaySkeleton() {
   );
 }
 
+function todaysDate() {
+  const today = new Date();
+
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  };
+
+  const formattedDate = today.toLocaleDateString("en-GB", options);
+  return formattedDate;
+}
+
 export default function Tasks() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [order, setOrder] = useState(searchParams.get("order") || "asc");
@@ -53,7 +67,7 @@ export default function Tasks() {
       <section className="flex basis-2/3 justify-center">
         <div className="flex flex-col w-10/12 p-4 items-center">
           <h1 className="text-white font-bold text-2xl mb-8 w-full">
-            Tasks as on: Wednesday, 1 jan 2025
+            Tasks as on: {todaysDate()}
           </h1>
           <div className="w-11/12 flex flex-col">
             <div className="flex justify-between mb-16">
