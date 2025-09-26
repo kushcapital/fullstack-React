@@ -71,9 +71,18 @@ export default function Tasks() {
           </h1>
           <div className="w-11/12 flex flex-col">
             <div className="flex justify-between mb-16">
-              <TaskCounter count={4} type="todo" />
-              <TaskCounter count={10} type="inProgress" />
-              <TaskCounter count={12} type="completed" />
+              <TaskCounter
+                count={tasks ? tasks.pagination.meta.todoTasks : 0}
+                type="todo"
+              />
+              <TaskCounter
+                count={tasks ? tasks.pagination.meta.inProgressTasks : 0}
+                type="inProgress"
+              />
+              <TaskCounter
+                count={tasks ? tasks.pagination.meta.completedTasks : 0}
+                type="completed"
+              />
             </div>
             <FilterBar order={order} setOrder={setOrder} />
 
