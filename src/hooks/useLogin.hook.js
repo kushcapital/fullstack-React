@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
+import { data } from "react-router-dom";
 
 const loginUser = async (user) => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}auth/login`, {
@@ -20,6 +21,15 @@ export function useLogin() {
     mutationFn: loginUser,
     onSuccess: (response) => {
       Cookies.set("token", response.data.accessToken, { expires: 7 });
+      Cookies.set(
+        "user",
+        JSON.stringify({
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          email: response.data.email,
+        }),
+        { expires: 7 }
+      );
     },
     onError: (error) => {
       console.log("Error authenticating ", error);
