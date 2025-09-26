@@ -14,6 +14,7 @@ import {
 import { useUpdateTask } from "@/hooks/useUpdateTask.hook.js";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import PropTypes from "prop-types";
 
 export function Task(props) {
   const { mutate, isSuccess } = useUpdateTask();
@@ -53,6 +54,13 @@ export function Task(props) {
       refetchType: "all",
     });
   }
+  function handleTaskCompleted() {
+    mutate({ _id: id, status: "completed" });
+    queryClient.invalidateQueries({
+      queryKey: ["fetchTasks"],
+      refetchType: "all", // refetch both active and inactive queries
+    });
+  }
 
   return (
     <Card className="w-full mb-6 shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-l-blue-500">
@@ -90,7 +98,7 @@ export function Task(props) {
       <CardFooter className="flex justify-between items-center pt-4 border-t border-slate-100">
         <div className="flex items-center gap-3">
           <Switch
-            // checked={progress}
+            checked={progress}
             onCheckedChange={handleProgressChange}
             id="in-progress"
             className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-slate-300 border-2 border-slate-200"
@@ -103,6 +111,7 @@ export function Task(props) {
           </Label>
         </div>
         <Button
+          onClick={handleTaskCompleted}
           variant="outline"
           className="bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
         >
@@ -112,3 +121,11 @@ export function Task(props) {
     </Card>
   );
 }
+
+Task.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  status: PropTypes.oneOf(["todo", "inProgress", "completed"]),
+  priority: PropTypes.oneOf(["low", "normal", "high"]),
+  dueDate: PropTypes.instanceOf(Date).isRequired,
+};
