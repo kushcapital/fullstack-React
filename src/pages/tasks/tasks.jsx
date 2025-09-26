@@ -41,6 +41,17 @@ export default function Tasks() {
   const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
   const { tasks, setTasks } = useContext(TaskContext);
 
+  // Update local state when URL parameters change (e.g., from pagination clicks)
+  useEffect(() => {
+    const urlOrder = searchParams.get("order") || "asc";
+    const urlLimit = parseInt(searchParams.get("limit")) || 10;
+    const urlPage = parseInt(searchParams.get("page")) || 1;
+
+    setOrder(urlOrder);
+    setLimit(urlLimit);
+    setPage(urlPage);
+  }, [searchParams]);
+
   // Update search params when state changes
   useEffect(() => {
     const params = new URLSearchParams();

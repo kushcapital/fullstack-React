@@ -7,6 +7,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 function Pagination({ className, ...props }) {
   return (
@@ -36,7 +37,7 @@ function PaginationItem({ ...props }) {
 
 function PaginationLink({ className, isActive, size = "icon", ...props }) {
   return (
-    <a
+    <Link
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-active={isActive}

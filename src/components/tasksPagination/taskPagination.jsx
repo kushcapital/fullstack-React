@@ -8,55 +8,64 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useContext, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { TaskContext } from "@/context/tasks.context.jsx";
 import { extractQueryString } from "@/lib/extractQueryString.js";
 
 export function TaskPagination() {
   const [links, setLinks] = useState();
   const [meta, setMeta] = useState();
+  const [searchParams] = useSearchParams();
   const { tasks, setTasks } = useContext(TaskContext);
 
+  // Get current URL parameters
+  const currentOrder = searchParams.get("order") || "asc";
+  const currentLimit = parseInt(searchParams.get("limit")) || 10;
+  const currentPage = parseInt(searchParams.get("page")) || 1;
+
+  // Calculate previous and next page URLs
   const previousPage =
-    links && links.previous
-      ? extractQueryString(links.previous).toString()
+    currentPage > 1
+      ? `limit=${currentLimit}&page=${currentPage - 1}&order=${currentOrder}`
       : "#";
   const nextPage =
-    links && links.next ? extractQueryString(links.next).toString() : "#";
-  const order =
-    links && links.next
-      ? extractQueryString(links.next).get("order")
-      : links && links.previous
-      ? extractQueryString(links.previous).get("order")
-      : "asc";
+    meta && currentPage < meta.totalPages
+      ? `limit=${currentLimit}&page=${currentPage + 1}&order=${currentOrder}`
+      : "#";
 
   useEffect(() => {
-    if (tasks?.pagination) {
+    if (tasks?.pagination?.links && tasks?.pagination?.meta) {
       setLinks(tasks.pagination.links);
       setMeta(tasks.pagination.meta);
     }
   }, [tasks]);
 
+  // Don't render pagination if we don't have proper data
+  if (!meta || !meta.totalPages || meta.totalPages <= 1) {
+    return null;
+  }
+
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href={`/tasks?${previousPage}`} />
+          <PaginationPrevious to={`/tasks?${previousPage}`} />
         </PaginationItem>
         {meta &&
           [...Array(meta.totalPages)].map((items, index) => (
             <PaginationItem key={`pag${index}`}>
               <PaginationLink
-                href={`/tasks?limit=${meta.itemsPerPage}&page=${
+                to={`/tasks?limit=${currentLimit}&page=${
                   index + 1
-                }&order=${order}`}
-                isActive={index + 1 === meta.currentPage}
+                }&order=${currentOrder}`}
+                isActive={index + 1 === currentPage}
               >
                 {index + 1}
               </PaginationLink>
             </PaginationItem>
           ))}
         <PaginationItem>
-          <PaginationNext href={`/tasks?${nextPage}`} />
+          <PaginationNext to={`/tasks?${nextPage}`} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
